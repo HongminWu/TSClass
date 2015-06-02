@@ -9,5 +9,8 @@ def IsFlat(ts, threshold = 1, method = 1):
 		else:
 			return True
 
-			
+def AreFlat(ts, threshold = 1, method = 1):
+	return [IsFlat(ts[i], threshold, method) for i in range(len(ts))]
+
+
 
