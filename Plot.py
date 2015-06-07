@@ -1,3 +1,9 @@
+import numpy as np
+from numpy import linalg as la
+from copy import deepcopy
+import matplotlib.pyplot as plt
+
+
 #plot first 5 things in each activity
 #input raw data numpy file, labels numpy file, prefix of file to save to
 #save pictures to files by prefix
