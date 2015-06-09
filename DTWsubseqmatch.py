@@ -43,6 +43,9 @@ if __name__ == "__main__":
                 trunc_mat[i,j] = best_trunc
                 dist_mat[i,j] = best_dist
 
+    np.save('dist_mat.npy', dist_mat)
+    np.save('trunc_mat.npy', trunc_mat)
+
 
 
 
