@@ -144,8 +144,7 @@ def firstDiffTS(x):
 def featureExtraction(file1):
 	featuresTS = []
 	multTSAll= np.load(file1)
-	m = multTSAll[0]
-	for TS in range(len(m)):
+	for TS in range(len(multTSAll)):
 		features=np.concatenate((np.array(getFeatures(transformTS(multTSAll[TS]))), np.array(getFeatures(firstDiffTS(transformTS(multTSAll[TS])))),np.array(getFeatures(getFFT(transformTS(multTSAll[TS]))))))
 		featuresTS.append(features)	
 	return featuresTS 
