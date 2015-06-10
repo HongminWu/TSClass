@@ -1,5 +1,8 @@
 import numpy as np
+from scipy.cluster.hierarchy import linkage, dendrogram, fcluster
 from TimeSeriesMethods import DTWDistance
+import Plot
+
 
 '''
 
@@ -25,11 +28,15 @@ def DTWsubseq(s, t, trunc = 10, bandwidth = 10, pnorm = 1):
 
 if __name__ == "__main__":
 
-    Xtrain = np.load('../6780Project/Xtrain.npy')
-    Ytrain = np.load('../6780Project/Ytrain.npy')
+    #Xtrain = np.load('../6780Project/Xtrain.npy')
+    #Ytrain = np.load('../6780Project/Ytrain.npy')
+
+    Xtrain = np.load('../Data/Xtrain.npy')
+    Ytrain = np.load('../Data/Ytrain.npy')
 
     # activity 0
-    Xtrain0 = Xtrain[Ytrain==0]
+    Xtrain0 = Xtrain[Ytrain==0][:100]
+    Ytrain0 = Ytrain[Ytrain==0][:100]
     n = Xtrain0.shape[0]
 
     dist_mat = np.zeros((n,n))
@@ -42,13 +49,29 @@ if __name__ == "__main__":
                 best_trunc, best_dist = DTWsubseq(Xtrain0[j],Xtrain0[i])
                 trunc_mat[i,j] = best_trunc
                 dist_mat[i,j] = best_dist
+                print best_dist
+
+    #np.save('dist_mat.npy', dist_mat)
+    #np.save('trunc_mat.npy', trunc_mat)
+
+    for i in range(n):
+        for j in range(n):
+            if j<i:
+                dist_mat[i,j] = dist_mat[j,i]
 
     np.save('dist_mat.npy', dist_mat)
     np.save('trunc_mat.npy', trunc_mat)
 
+    dist_mat = np.load('dist_mat.npy')
+    trunc_mat = np.load('trunc_mat.npy')
 
+    # hierachical clustering
+    data_link = linkage(dist_mat, method='complete')
+    ind = fcluster(data_link, 0.7*data_link.max(),criterion='distance')
+    num_cluster = max(ind) # number of clusters for activity
+    cluster = [] # clusters
+    for c in range(1,num_cluster+1):
+        cluster.append(Xtrain0[ind==c])
 
-
-
-
-
+    for c in range(1,num_cluster+1):
+        Plot.plot_raw(cluster[c-1], Ytrain0[ind==c], 'plot/hcluster'+str(c), 5, act=1, file=False)
