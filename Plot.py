@@ -7,12 +7,18 @@ import matplotlib.pyplot as plt
 #plot first 5 things in each activity
 #input raw data numpy file, labels numpy file, prefix of file to save to
 #save pictures to files by prefix
-def plot_raw(raw_file, y_file, prefix, num): 
+def plot_raw(raw_file, y_file, prefix, num, act=6, file=True):
     x = range(0,256,2)
-    df = np.load(raw_file)
-    y = np.load(y_file
-    for j in range(6):
+    if file:
+        df = np.load(raw_file)
+        y = np.load(y_file)
+    else:
+        df = raw_file
+        y = y_file
+    for j in range(act):
         ts_list = df[y==j]
+        if len(ts_list)==0:
+            continue
         # acceleration
         plt.subplot(311)
         plt.ylabel('Acc x-axis $(m s^{-2})$')
