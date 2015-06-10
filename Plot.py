@@ -13,6 +13,8 @@ def plot_raw(raw_file, y_file, prefix, num):
     y = np.load(y_file)
     for j in range(6):
         ts_list = df[y==j]
+        if len(ts_list)==0:
+            continue
         # acceleration
         plt.subplot(311)
         plt.ylabel('Acc x-axis $(m s^{-2})$')

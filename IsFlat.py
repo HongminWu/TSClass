@@ -62,18 +62,24 @@ print "Hellow World!"
 xTrain = np.load("MotionData/Xtrain.npy")
 yTrain = np.load("MotionData/Ytrain.npy")
 areFlat = AreFlat(xTrain, GetPrior(xTrain))
-np.save("MotionData/xTrainF.npy", xTrain[areFlat])
-print xTrain[areFlat]
-np.save("MotionData/yTrainF.npy", yTrain[areFlat])
+np.save("MotionData/xTrainF.npy", [xTrain[i] for i in range(len(areFlat)) if areFlat[i]])
+np.save("MotionData/yTrainF.npy", [yTrain[i] for i in range(len(areFlat)) if areFlat[i]])
+np.save("MotionData/xTrainC.npy", [xTrain[i] for i in range(len(areFlat)) if not areFlat[i]])
+np.save("MotionData/yTrainC.npy", [yTrain[i] for i in range(len(areFlat)) if not areFlat[i]])
+# print yTrain[areFlat]
 print "Train Finished", sum(areFlat)
 
 xTest = np.load("MotionData/Xtest.npy")
 yTest = np.load("MotionData/Ytest.npy")
-areFlat = AreFlat(xTest, GetPrior(xTest))
-np.save("MotionData/xTestF.npy", xTest[areFlat])
-np.save("MotionData/yTestF.npy", yTest[areFlat])
+areFlat = AreFlat(xTest, GetPrior(xTrain))
+np.save("MotionData/xTestF.npy", [xTest[i] for i in range(len(areFlat)) if areFlat[i]])
+np.save("MotionData/yTestF.npy", [yTest[i] for i in range(len(areFlat)) if areFlat[i]])
+np.save("MotionData/xTestC.npy", [xTest[i] for i in range(len(areFlat)) if not areFlat[i]])
+np.save("MotionData/yTestC.npy", [yTest[i] for i in range(len(areFlat)) if not areFlat[i]])
 print "Test Finished", sum(areFlat)
 
-plot.plot_raw("MotionData/xTrainF.npy", "MotionData/yTrainF.npy", "tt", 2)
-
+# plot.plot_raw("MotionData/xTrainF.npy", "MotionData/yTrainF.npy", "tt", 10)
+plot.plot_raw("MotionData/xTrain.npy", "MotionData/yTrain.npy", "OR", 10)
+plot.plot_raw("MotionData/xTrainF.npy", "MotionData/yTrainF.npy", "FL", 10)
+plot.plot_raw("MotionData/xTrainC.npy", "MotionData/yTrainC.npy", "SP", 10)
 
