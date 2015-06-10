@@ -3,12 +3,14 @@ from numpy import linalg as la
 import scipy as sp
 import Reader as r
 
+#6 features
 def getMean(x):
 	means = []
 	for k in x:
 		means.append(np.mean(k))
 	return means
 
+#6 features
 def getSD(x):
 	sds = []
 	for k in x:
@@ -19,22 +21,30 @@ def getFFT(x):
 	freqx = []
 	for k in x:
 		freqx.append(np.fft.fft(k))
+	for f in range(len(freqx)):
+		for k in range(len(freqx[f])):
+			freqx[f][k]=np.real_if_close(np.abs(freqx[f][k]),tol=1000)
 	return freqx
+
+#6 features
 def energy(x):
 	energies = []
 	freqs = getFFT(x)
 	for f in freqs:
 		temp = 0
 		for i in range(len(f)):
-			temp+=(np.abs(f[i])**2)/float(len(f))
+			temp+=(f[i]**2)/float(len(f))
 		energies.append(temp)
 	return energies
 
+#15 features
 def correlation(x):
 	correlations = []
 	for i in range(len(x)):
+		q = [float(w) for w in x[i]]
 		for j in range(i,len(x)):
-			correlations.append(float(np.correlate(x[i],x[j])))
+			r = [float(m) for m in x[j]]
+			correlations.append(float(np.correlate(q,r)))
 	return correlations
 
 #calculates autocorrelation
@@ -42,7 +52,8 @@ def autocorr(x):
 	autocorrs = []
 	for k in x:
 		temp = []
-		corr = np.correlate(k, k, mode='full')
+		q = [float(w) for w in k]
+		corr = np.correlate(q, q, mode='full')
 		corr = corr[corr.size/2:]
 		autocorrs.append(corr.item(0))
 		for w in range(1,corr.size):
@@ -117,14 +128,27 @@ def getFeatures(x):
 def transformTS(x):
 	return map(list, zip(*x))
 
+def firstDiffTS(x):
+	for k in range(len(x)):
+		for i in range(len(x[k])):
+			if i==0:
+				x[k][i]=x[k][i+1]-x[k][i]
+			elif i==len(x[k])-1:
+				x[k][i]=x[k][i]-x[k][i-1]
+			else:
+				x[k][i] = (x[k][i+1] - x[k][i-1])/2.0
+	return x
+
+
 
 def featureExtraction(file1):
-	features = []
+	featuresTS = []
 	multTSAll= np.load(file1)
-	for TS in range(len(multTSAll)):
-		print TS
-		features.append(getFeatures(transformTS(multTSAll[TS])))
-	return features
+	m = multTSAll[0]
+	for TS in range(len(m)):
+		features=np.concatenate((np.array(getFeatures(transformTS(multTSAll[TS]))), np.array(getFeatures(firstDiffTS(transformTS(multTSAll[TS])))),np.array(getFeatures(getFFT(transformTS(multTSAll[TS]))))))
+		featuresTS.append(features)	
+	return featuresTS 
 
 
 
