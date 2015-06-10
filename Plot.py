@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 def plot_raw(raw_file, y_file, prefix, num): 
     x = range(0,256,2)
     df = np.load(raw_file)
-    y = np.load(y_file
+    y = np.load(y_file)
     for j in range(6):
         ts_list = df[y==j]
         # acceleration
