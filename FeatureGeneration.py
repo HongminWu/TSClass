@@ -113,7 +113,14 @@ def rms(x):
 		rmss.append(np.sqrt(np.mean(k)))
 	return rmss
 
-
+def AR(index,file2):
+	ars =  []
+	arfeatures =  range(25,37)+range(65,77)+range(105,117)+range(145,157)+range(185,197)+range(209,213)+range(222,226)+range(235,239)+range(248,252)+range(261,265)
+	features = np.load(file2)
+	for k in range(len(features[index])):
+		if k in arfeatures:
+			ars.append(features[index][k])
+	return ars
 
 def getFeatures(x):
 	featureVec = []
@@ -141,11 +148,11 @@ def firstDiffTS(x):
 
 
 
-def featureExtraction(file1):
+def featureExtraction(file1,file2):
 	featuresTS = []
 	multTSAll= np.load(file1)
 	for TS in range(len(multTSAll)):
-		features=np.concatenate((np.array(getFeatures(transformTS(multTSAll[TS]))), np.array(getFeatures(firstDiffTS(transformTS(multTSAll[TS])))),np.array(getFeatures(getFFT(transformTS(multTSAll[TS]))))))
+		features=np.concatenate((np.array(AR(TS,file2)), np.array(getFeatures(transformTS(multTSAll[TS]))), np.array(getFeatures(firstDiffTS(transformTS(multTSAll[TS])))),np.array(getFeatures(getFFT(transformTS(multTSAll[TS]))))))
 		featuresTS.append(features)	
 	return featuresTS 
 
