@@ -27,7 +27,7 @@ while j<400:
 		Xtest = pca.transform(feature_test)
 		w.append(svm.LinearSVC().fit(Xtrain, label_train).score(Xtest, label_test))
 		k+=1
-	s.append((np.mean(w),j))
+	s.append((max(w),j))
 	j+=2
 print s
 
