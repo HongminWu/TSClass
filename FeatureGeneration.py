@@ -17,6 +17,18 @@ def getSD(x):
 		sds.append(np.std(k))
 	return sds
 
+def largest5FFT(x):
+	ffts = getFFT(x)
+	largest = []
+	for k in x:
+		s = np.sort(k)
+		s = s[len(s)-(5+1):len(s)]
+		for j in s:
+			largest.append(j)
+	return largest
+
+
+
 def getFFT(x):
 	freqx = []
 	for k in x:
@@ -124,13 +136,23 @@ def AR(index,file2):
 
 def getFeatures(x):
 	featureVec = []
-	featureFunctions = [getMean, getSD, energy, correlation, autocorr, averageAbs, averageRes, numZeros, getKurtosis, getSkew, rms]
+	featureFunctions = [getMean, getSD, energy, correlation, autocorr, averageAbs, averageRes, numZeros, getKurtosis, getSkew, rms, largest5FFT]
 	#featureFunctions = [averageRes]
 	for f in range(len(featureFunctions)):
 		w = featureFunctions[f](x)
 		for i in w:
 			featureVec.append(i)
 	return featureVec
+
+def getFeaturesFFT(x):
+	featureVec = []
+	featureFunctions = [getMean, getSD, getKurtosis, getSkew]
+	for f in range(len(featureFunctions)):
+		w = featureFunctions[f](x)
+		for i in w:
+			featureVec.append(i)
+	return featureVec
+
 
 def transformTS(x):
 	return map(list, zip(*x))
@@ -152,7 +174,8 @@ def featureExtraction(file1,file2):
 	featuresTS = []
 	multTSAll= np.load(file1)
 	for TS in range(len(multTSAll)):
-		features=np.concatenate((np.array(AR(TS,file2)), np.array(getFeatures(transformTS(multTSAll[TS]))), np.array(getFeatures(firstDiffTS(transformTS(multTSAll[TS])))),np.array(getFeatures(getFFT(transformTS(multTSAll[TS]))))))
+		features=np.concatenate((np.array(getFeaturesFFT(getFFT(transformTS(multTSAll[TS])))),AR(TS,file2), 
+			np.array(getFeatures(transformTS(multTSAll[TS]))), np.array(getFeatures(firstDiffTS(transformTS(multTSAll[TS]))))))
 		featuresTS.append(features)	
 	return featuresTS 
 

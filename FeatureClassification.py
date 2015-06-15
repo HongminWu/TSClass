@@ -6,24 +6,34 @@ import sklearn.tree as tree
 import FeatureGeneration as fg
 import Reader as r
 
-feature_train = fg.featureExtraction("UCI_HAR_all_multivariateTS.npy", "X_train_UCI_features.npy")
-feature_test = fg.featureExtraction("UCI_HAR_all_test_multTS.npy", "X_test_UCI_features.npy")
-np.save("Xtrain_features.npy", feature_train)
-np.save("Xtest_features.npy", feature_test)
+# feature_train = fg.featureExtraction("UCI_HAR_all_multivariateTS.npy", "X_train_UCI_features.npy")
+# feature_test = fg.featureExtraction("UCI_HAR_all_test_multTS.npy", "X_test_UCI_features.npy")
+# np.save("Xtrain_features.npy", feature_train)
+# np.save("Xtest_features.npy", feature_test)
 feature_train = np.load("Xtrain_features.npy")
 feature_test = np.load("Xtest_features.npy")
 
-label_test = np.load("yTest.npy")
-label_train = np.load("yTrain.npy")
-
+label_test = np.load("UCI_HAR_test_labels.npy")
+label_train = np.load("UCI_HAR_train_labels.npy")
+j = 350
+k = 0
 s = []
-for k in range(10):
-	#pca = PCA(n_components=256)    
-	#Xtrain = pca.fit(feature_train).transform(feature_train)
+while j<400:
+	w = []
+	while k<10:
+		pca = PCA(n_components=j)    
+		Xtrain = pca.fit(feature_train).transform(feature_train)
 
-	#Xtest = pca.transform(feature_test)
-	s.append(svm.LinearSVC().fit(feature_train, label_train).score(feature_test, label_test))
-print np.mean(s)
+		Xtest = pca.transform(feature_test)
+		w.append(svm.LinearSVC().fit(Xtrain, label_train).score(Xtest, label_test))
+		k+=1
+	s.append((np.mean(w),j))
+	j+=2
+print s
+
+
+
+
 
 
 
