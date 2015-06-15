@@ -45,6 +45,26 @@ def readLabels(file1,file2):
     np.save(file2,activity)
     return activity
 
-readLabels("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/y_test.txt", "UCI_HAR_test_labels.npy")
+
+#create features
+#saves list to npy file
+#input file name (read), file name (write)
+#output list of features
+def readFeatures(file1,file2):
+    x=[]
+    with open(file1) as f:
+        lines=f.readlines()
+    
+    for line in lines:
+        x.append(line.split())
+        
+    for l in range(len(x)):
+        for j in range(len(x[l])):
+            x[l][j]=float(x[l][j])
+    np.save(file2,x)
+    return x
+
+#readFeatures("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/X_test.txt", "X_test_UCI_features.npy")
+#readLabels("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/y_test.txt", "UCI_HAR_test_labels.npy")
 
 
