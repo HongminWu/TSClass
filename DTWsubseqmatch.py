@@ -75,7 +75,7 @@ if __name__ == "__main__":
     for act in range(6):
         Xtrain_act = Xtrain[Ytrain==act]
         data_link = linkage(dist_mat[act], method='complete')
-        ind = fcluster(data_link, 0.7*data_link.max(), criterion='distance')
+        ind = fcluster(data_link, 0.5*data_link.max(), criterion='distance')
         num_cluster = max(ind) # number of clusters for activity
         for c in range(1,num_cluster+1):
             cluster.append(Xtrain_act[ind==c])
@@ -84,6 +84,6 @@ if __name__ == "__main__":
     num_c = ycluster.__len__()
     for c in range(num_c):
         Plot.plot_raw(cluster[c], np.array(ycluster[c]*cluster[c].shape[0]),
-                      'plot/act'+str(ycluster[c])+'_hcluster'+str(c), 5, act=1, file=False)
+                      'plot/act'+str(ycluster[c])+'_hcluster'+str(c), 5, act=6, file=False)
 
 '''

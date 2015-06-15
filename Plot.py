@@ -19,35 +19,39 @@ def plot_raw(raw_file, y_file, prefix, num, act=6, file=True):
         ts_list = df[y==j]
         if len(ts_list)==0:
             continue
+        if len(ts_list)<num:
+            num_act = len(ts_list)
+        else:
+            num_act = num
         # acceleration
         plt.subplot(311)
         plt.ylabel('Acc x-axis $(m s^{-2})$')
-        for i in range(num):
+        for i in range(num_act):
             plt.plot(x,ts_list[i][:, 0], ms=2)
         plt.subplot(312)
         plt.ylabel('Acc y-axis $(m s^{-2})$')
-        for i in range(num):
+        for i in range(num_act):
             plt.plot(x,ts_list[i][:, 1], ms=2)
         plt.subplot(313)
         plt.ylabel('Acc z-axis $(m s^{-2})$')
         plt.xlabel('Time (ms)')
-        for i in range(num):
+        for i in range(num_act):
             plt.plot(x,ts_list[i][:, 2], ms=2)
         plt.savefig(prefix+'_acc'+str(j))
         plt.close()
         # gyroscope
         plt.subplot(311)
         plt.ylabel('$\omega$ x-axis $(rad s^{-1})$')
-        for i in range(num):
+        for i in range(num_act):
             plt.plot(x,ts_list[i][:, 3], ms=2)
         plt.subplot(312)
         plt.ylabel('$\omega$ y-axis $(rad s^{-1})$')
-        for i in range(num):
+        for i in range(num_act):
             plt.plot(x,ts_list[i][:, 4], ms=2)
         plt.subplot(313)
         plt.ylabel('$\omega$ z-axis $(rad s^{-1})$')
         plt.xlabel('Time (ms)')
-        for i in range(num):
+        for i in range(num_act):
             plt.plot(x,ts_list[i][:, 5], ms=2)
         plt.savefig(prefix+'_gyr'+str(j))
         plt.close()
