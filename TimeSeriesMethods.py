@@ -47,6 +47,20 @@ def DTWDistance(s,t,bandwidth = 16, pnorm = 1):
     optpath.append((0,0))
     return DTW[len(DTW)-1][len(DTW[0])-1], optpath[::-1]
 
+# A variation of subsequence DTW on time-series s,t (misaligned, periodic).
+# s query, t reference
+# For trunc (~ period), truncate s at the start and t at the end by {1,...trunc} units,
+# and returns the best distance and the corresponding truncation.
+def DTWsubseq(s, t, trunc = 25, bandwidth = 5, pnorm = 1):
+    best_trunc = 0
+    best_dist = np.inf
+    for i in range(trunc):
+        dtw, path = DTWDistance(s[i:], t[:128-i], bandwidth=bandwidth, pnorm=pnorm)
+        if (dtw*128/(128-i))<best_dist:
+            best_dist = (dtw*128/(128-i)) # good way to account for length diff?
+            best_trunc = i
+    return best_trunc, best_dist
+
 #Calculates Dynamic time warping distance and path
 #input time series s (list), time series t (list)
 #output time series t aligned to s
