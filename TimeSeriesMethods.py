@@ -50,9 +50,9 @@ def DTWDistance(s,t,bandwidth = 16, pnorm = 1):
 #Calculates Dynamic time warping distance and path
 #input time series s (list), time series t (list)
 #output time series t aligned to s
-def align(s, t):  
+def align(s, t, bandwidth=16, pnorm=1):
     r = deepcopy(t)
-    DTW, path = DTWDistance(s, r)
+    DTW, path = DTWDistance(s, r, bandwidth=bandwidth, pnorm=pnorm)
     q = deepcopy(r)
     for j in path:
         q[j[0]]=r[j[1]]
