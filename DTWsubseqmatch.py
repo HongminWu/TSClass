@@ -64,14 +64,18 @@ if __name__ == "__main__":
 '''
     # Hierarchical clustering
 
-    Xtrain = np.load('xTrainC.npy')
-    Ytrain = np.load('yTrainC.npy')
+    import os
+    os.chdir('/home/wenyu/Dropbox/TSCLASS')
 
-    dist_mat = np.load('dist_mat.npy')
-    trunc_mat = np.load('trunc_mat.npy')
+    Xtrain = np.load('MotionData/xTrainC.npy')
+    Ytrain = np.load('MotionData/yTrainC.npy')
+
+    dist_mat = np.load('Distances/dist_mats.npy')
+    trunc_mat = np.load('Distances/trunc_mats.npy')
 
     cluster = [] # cluster for all activities
     ycluster = [] # cluster label
+    trunc_cluster = [] # trunc shifts within cluster
     for act in range(6):
         Xtrain_act = Xtrain[Ytrain==act]
         data_link = linkage(dist_mat[act], method='complete')
@@ -80,6 +84,11 @@ if __name__ == "__main__":
         for c in range(1,num_cluster+1):
             cluster.append(Xtrain_act[ind==c])
             ycluster.append(act)
+            trunc_cluster.append(trunc_mat[act][ind==c][:,ind==c])
+
+    np.save('cluster.npy', cluster)
+    np.save('ycluster.npy', ycluster)
+    np.save('trunc_cluster.npy', trunc_cluster)
 
     num_c = ycluster.__len__()
     for c in range(num_c):
