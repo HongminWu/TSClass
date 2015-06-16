@@ -10,7 +10,7 @@ def IsFlat(ts, param = 1, method = 0):
 	if method==0:
 		for ACT in range(len(ts[0])):
 			temp = max(ts[:, ACT])-min(ts[:, ACT])
-			if (temp-param[ACT+ACT])*200>(param[ACT+ACT+1]-temp):
+			if (temp-param[ACT+ACT])*50>(param[ACT+ACT+1]-temp):
 				return False
 		else:
 			return True
@@ -68,6 +68,8 @@ np.save("MotionData/xTrainC.npy", [xTrain[i] for i in range(len(areFlat)) if not
 np.save("MotionData/yTrainC.npy", [yTrain[i] for i in range(len(areFlat)) if not areFlat[i]])
 # print yTrain[areFlat]
 print "Train Finished", sum(areFlat)
+np.save("MotionData/xTrainL.npy", areFlat)
+print "Samples from: ", [sum([areFlat[i] for i in range(len(yTrain)) if yTrain[i]==ACT]) for ACT in range(6)]
 
 xTest = np.load("MotionData/Xtest.npy")
 yTest = np.load("MotionData/Ytest.npy")
@@ -76,10 +78,11 @@ np.save("MotionData/xTestF.npy", [xTest[i] for i in range(len(areFlat)) if areFl
 np.save("MotionData/yTestF.npy", [yTest[i] for i in range(len(areFlat)) if areFlat[i]])
 np.save("MotionData/xTestC.npy", [xTest[i] for i in range(len(areFlat)) if not areFlat[i]])
 np.save("MotionData/yTestC.npy", [yTest[i] for i in range(len(areFlat)) if not areFlat[i]])
+np.save("MotionData/xTestL.npy", areFlat)
 print "Test Finished", sum(areFlat)
 
 # plot.plot_raw("MotionData/xTrainF.npy", "MotionData/yTrainF.npy", "tt", 10)
-plot.plot_raw("MotionData/xTrain.npy", "MotionData/yTrain.npy", "OR", 10)
-plot.plot_raw("MotionData/xTrainF.npy", "MotionData/yTrainF.npy", "FL", 10)
-plot.plot_raw("MotionData/xTrainC.npy", "MotionData/yTrainC.npy", "SP", 10)
+plot.plot_raw("MotionData/xTrain.npy", "MotionData/yTrain.npy", "OR", 20)
+plot.plot_raw("MotionData/xTrainF.npy", "MotionData/yTrainF.npy", "FL", 20)
+plot.plot_raw("MotionData/xTrainC.npy", "MotionData/yTrainC.npy", "SP", 20)
 
