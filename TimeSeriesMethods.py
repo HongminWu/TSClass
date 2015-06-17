@@ -1,10 +1,6 @@
 import numpy as np
 from numpy import linalg as la
 from copy import deepcopy
-<<<<<<< HEAD
-
-
->>>>>>> b35ad43093257e33dc7b82e7ec27cdb60ffc7af9
 
 #Calculates Dynamic time warping distance and path
 #input time series s (list), time series t (list), bandwidth for matrix of calculations, norm type
