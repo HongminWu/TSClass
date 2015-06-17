@@ -34,7 +34,7 @@ def classify(file1,file2):
 		dist = []
 		print "sample", i
 		for template in cluster_templates:
-			dist.append(ts.DTWDistance(sample,template)[0])
+			dist.append(ts.DTWsubseq(sample,template)[1])
 		predicted_labels.append(cluster_labels[np.argmin(dist)])
 		i+=1
 	np.save("predicted_labels_hclust_average_lessweird.npy", predicted_labels)
