@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import linalg as la
+from copy import deepcopy
 
 
 #Calculates Dynamic time warping distance and path

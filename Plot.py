@@ -60,11 +60,16 @@ def plot_raw(raw_file, y_file, prefix, num, act=6, file=True):
 #plot with multiple templates
 #input numpy file containing templates, aligned numpy raw data, labels numpy file, prefix of file to save to
 #save pictures to files by prefix
-def plot_template_many(temp_file, align_file, y_file, prefix): # plot with multiple templates
+def plot_template_many(temp_file, align_file, y_file, prefix, file=True): # plot with multiple templates
     x = range(0,256,2)
-    templates = np.load(temp_file+'.npy')
-    df = np.load(align_file+'.npy')
-    y = np.load(y_file+'.npy')
+    if file:
+        templates = np.load(temp_file+'.npy')
+        df = np.load(align_file+'.npy')
+        y = np.load(y_file+'.npy')
+    else:
+        templates = temp_file
+        df = align_file
+        y = y_file
     for j in range(len(y)):
         label = y[j]
         first_index = sum(y<label)
@@ -76,7 +81,6 @@ def plot_template_many(temp_file, align_file, y_file, prefix): # plot with multi
         plt.ylabel('Acc x-axis $(m s^{-2})$')
         for i in range(nseries):
             ts_list[i] = np.array(ts_list[i])
-            print ts_list[i][:,0]
             plt.plot(x,ts_list[i][:, 0], '.', ms=2)
         plt.plot(x,dba_avg[:, 0], 'k', linewidth=2)
         plt.subplot(312)
