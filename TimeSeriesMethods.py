@@ -1,7 +1,10 @@
 import numpy as np
 from numpy import linalg as la
 from copy import deepcopy
+<<<<<<< HEAD
 
+
+>>>>>>> b35ad43093257e33dc7b82e7ec27cdb60ffc7af9
 
 #Calculates Dynamic time warping distance and path
 #input time series s (list), time series t (list), bandwidth for matrix of calculations, norm type
@@ -77,9 +80,7 @@ def align(s, t, bandwidth=16, pnorm=1):
 #input list of time series
 #output average of the time series or 0 if the list is empty
 def average(timeSeries):
-    print "Entered newAverage"
     Y = np.array(timeSeries)
-    print len(Y)
     if len(Y)>0:
         return sum(Y)/len(Y)
     else:
