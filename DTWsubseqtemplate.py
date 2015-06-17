@@ -20,9 +20,6 @@ def template(cluster_mat, trunc_mat, bandwidth = 5, pnorm = 1):
 
 if __name__ == "__main__":
 
-
-__author__ = 'wenyu'
-
     import os
     import dba
     '''
