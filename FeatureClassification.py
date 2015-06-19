@@ -6,10 +6,10 @@ import sklearn.tree as tree
 import FeatureGeneration as fg
 import Reader as r
 
-# feature_train = fg.featureExtraction("UCI_HAR_all_multivariateTS.npy", "X_train_UCI_features.npy")
-# feature_test = fg.featureExtraction("UCI_HAR_all_test_multTS.npy", "X_test_UCI_features.npy")
-# np.save("Xtrain_features.npy", feature_train)
-# np.save("Xtest_features.npy", feature_test)
+#feature_train = fg.featureExtraction("UCI_HAR_all_multivariateTS.npy", "X_train_UCI_features.npy")
+#feature_test = fg.featureExtraction("UCI_HAR_all_test_multTS.npy", "X_test_UCI_features.npy")
+#np.save("Xtrain_features.npy", feature_train)
+#np.save("Xtest_features.npy", feature_test)
 feature_train = np.load("Xtrain_features.npy")
 feature_test = np.load("Xtest_features.npy")
 
@@ -20,6 +20,7 @@ k = 0
 s = []
 while j<400:
 	w = []
+	k=0
 	while k<10:
 		pca = PCA(n_components=j)    
 		Xtrain = pca.fit(feature_train).transform(feature_train)
