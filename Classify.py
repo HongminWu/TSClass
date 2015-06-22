@@ -3,7 +3,7 @@ from numpy import linalg as la
 import TimeSeriesMethods as ts
 import random as r
 clusters = np.load("cluster.npy")
-cluster_labels = np.load("ycluster.npy")
+cluster_labels = np.load("ycluster10.npy")
 
 
 def buildTemplates():
@@ -25,8 +25,8 @@ def buildTemplates():
 def classify(file1,file2,num):
 	testTS = np.load(file1)
 	test_labels = np.load(file2)
-	cluster_templates = buildTemplates()
-
+	#cluster_templates = buildTemplates()
+	cluster_templates = np.load("dba_templatees.npy")
 	#build predited labels
 	predicted_labels = []
 	i=0
