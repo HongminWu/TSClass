@@ -16,61 +16,31 @@ def buildTemplates():
 			clusters[j][k] = ts.align(cluster_random[j], clusters[j][k])
 	for l in clusters:
 		cluster_templates_aligned.append(ts.average(l))
+
+	np.save("cluster_templates_hclust_average_new_dist.npy",cluster_templates_aligned)
 	return cluster_templates_aligned
 
-def classifySVM(file1,file2,num):
-	dist_features_test = np.load("distances_hclust_average_new_dist.npy")
-	xTrain = np.load(file1)
-	yTrain=np.load(file2)
+def classifySVM():
+	dist_features_train = np.load("distances_hclust_average_new_dist_train.npy")
+	dist_features_test = np.load("distances_hclust_average_new_dist_test.npy")
 	yTest = np.load("yTestC.npy")
-	cluster_temps = np.load("cluster_templates_hclust_average_new_dist.npy")
-	dist_features_train = []
-	for k in xTrain:
-		dist = []
-		for temp in cluster_temps:
-			dist.append(ts.DTWsubseq(k,temp)[1])
-		dist_features_train.append(dist)
-	np.save("distances_hclust_average_new_dist.npy")
-        #Xtest = pca.transform(feature_test)
+	yTrain = np.load("yTrainC.npy")
+
 	y_pred =  svm.LinearSVC().fit(dist_features_train,label_train).predict(distance_features_test)
 	cm = confusion_matrix(label_test,y_pred)
 	s=svm.LinearSVC().fit(dist_features_train, yTrain).score(dist_features_test, yTest)
         return cm, s
 	
-#file 1 is time series, file 2 is labels
-#saves confusion matrix
-#outputs confusion amtrix, accuracy
-def getDistances(file1,file2,num):
-	testTS = np.load(file1)
-	test_labels = np.load(file2)
-	cluster_templates = buildTemplates()
-	np.save("cluster_templates_hclust_average_new_dist.npy",cluster_templates)
-	#cluster_templates = np.load("dba_templates.npy")
-	#build predited labels
-	'''
-	for k in range(len(test_labels)):
-	    if test_labels[k]>2:
-		test_labels[k]=3
-	for w in range(len(cluster_labels)):
-	    if cluster_labels[w]>2:
-		cluster_labels[w]=3
-	'''
-        distancefeatures = []
-	predicted_labels = []
-	i=0
-	for sample in testTS:
-		dist = []
-		print "sample", i
-		for template in cluster_templates:
-			dist.append(ts.DTWsubseq(sample,template)[1])
-		distancefeatures.append(dist)
-		#predicted_labels.append(cluster_labels[np.argmin(dist)])
-		i+=1
-	np.save("distances_hclust_average_new_dist.npy",distancefeatures)
-	np.save("predicted_labels_hclust_average_new_dist_less_labels.npy", predicted_labels)
-	#predicted_labels = np.load("predicted_labels_hclust_average_lessweird.npy")
-	'''
-	#accuracy and confusion matrix
+def classify():
+	predicted_labels=[]
+	cluster_templates = np.load("cluster_templates_hclust_average_new_dist.npy",)
+
+	dist_features_train = np.load("distances_hclust_average_new_dist_train.npy")
+	dist_features_test = np.load("distances_hclust_average_new_dist_test.npy")
+	yTest = np.load("yTestC.npy")
+	yTrain = np.load("yTrainC.npy")
+	for k in dist_features_test:
+		predicted_labels.append(np.argmin(k))
 	accuracy = 0
 	confusion_matrix = np.zeros(shape=(6,6))	
 	for p in range(len(predicted_labels)):
@@ -81,11 +51,55 @@ def getDistances(file1,file2,num):
 
 	np.save("confusion_matirx_hclust_new_dist_less_labels"+str(num)+".npy",confusion_matrix)
 	return confusion_matrix, float(accuracy)/len(test_labels)
+
+
+def getDistances(test,test_labels,train,train_labels,num):
+	testTS = np.load(test)
+	test_labels = np.load(test_labels)
+	cluster_templates = np.load("cluster_templates_hclust_average_new_dist.npy",)
+	#cluster_templates = np.load("dba_templates.npy")
+	#build predited labels'
+    distancefeatures = []
+	predicted_labels = []
+	i=0
+	for sample in testTS:
+		dist = []
+		print "sample", i
+		for template in cluster_templates:
+			dist.append(ts.DTWsubseq(sample,template)[1])
+		distancefeatures.append(dist)
+		#predicted_labels.append(cluster_labels[np.argmin(dist)])
+		i+=1
+	np.save("distances_hclust_average_new_dist_test"+str(num)+".npy",distancefeatures)
+
+	dist_features_train = []
+	xTrain = np.load(train)
+	yTrain=np.load(train_labels)
+	for k in xTrain:
+		dist = []
+		for temp in cluster_templates:
+			dist.append(ts.DTWsubseq(k,temp)[1])
+		dist_features_train.append(dist)
+	np.save("distances_hclust_average_new_dist_train"+str(num)+".npy",distance_features_train)
+
 	'''
-print getDistances("xTestC.npy","yTestC.npy",0)
+	for k in range(len(test_labels)):
+	    if test_labels[k]>2:
+		test_labels[k]=3
+	for w in range(len(cluster_labels)):
+	    if cluster_labels[w]>2:
+		cluster_labels[w]=3
+	'''
+
+	return distance_features_train,distancefeatures
+	#np.save("predicted_labels_hclust_average_new_dist_less_labels.npy", predicted_labels)
+	#predicted_labels = np.load("predicted_labels_hclust_average_lessweird.npy")
+
+
+#print getDistances("xTestC.npy","yTestC.npy",0)
 #print classify("PUCK_xTestC_5.npy", "PUCK_yTestC_5.npy",5)
-#np.save("PUCK_xTestC_1.npy",np.load("PUCK_xTestC.npy")[0:int(len(np.load("PUCK_xTestC.npy"))/5)])
-#np.save("PUCK_xTestC_2.npy",np.load("PUCK_xTestC.npy")[int(len(np.load("PUCK_xTestC.npy"))/5):int(len(np.load("PUCK_xTestC.npy"))*2/5)])
-#np.save("PUCK_xTestC_3.npy",np.load("PUCK_xTestC.npy")[int(len(np.load("PUCK_xTestC.npy"))*2/5):int(len(np.load("PUCK_xTestC.npy"))*3/5)])
-#np.save("PUCK_xTestC_4.npy",np.load("PUCK_xTestC.npy")[int(len(np.load("PUCK_xTestC.npy"))*3/5):int(len(np.load("PUCK_xTestC.npy"))*4/5)])
-#np.save("PUCK_xTestC_5.npy",np.load("PUCK_xTestC.npy")[int(len(np.load("PUCK_xTestC.npy"))*4/5):int(len(np.load("PUCK_xTestC.npy")))])	
+np.save("xTrainC_1.npy",np.load("xTrainC.npy")[0:int(len(np.load("xTrainC.npy"))/5)])
+np.save("xTrainC_2.npy",np.load("xTrainC.npy")[int(len(np.load("xTrainC.npy"))/5):int(len(np.load("xTrainC.npy"))*2/5)])
+np.save("xTrainC_3.npy",np.load("xTrainC.npy")[int(len(np.load("xTrainC.npy"))*2/5):int(len(np.load("xTrainC.npy"))*3/5)])
+np.save("xTrainC_4.npy",np.load("xTrainC.npy")[int(len(np.load("xTrainC.npy"))*3/5):int(len(np.load("xTrainC.npy"))*4/5)])
+np.save("xTrainC_5.npy",np.load("xTrainC.npy")[int(len(np.load("xTrainC.npy"))*4/5):int(len(np.load("xTrainC.npy")))])	
