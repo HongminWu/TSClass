@@ -5,32 +5,36 @@ from sklearn.decomposition import PCA
 import sklearn.tree as tree
 import FeatureGeneration as fg
 import Reader as r
+from sklearn.metrics import confusion_matrix
 
-#feature_train = fg.featureExtraction("UCI_HAR_all_multivariateTS.npy", "X_train_UCI_features.npy")
-#feature_test = fg.featureExtraction("UCI_HAR_all_test_multTS.npy", "X_test_UCI_features.npy")
-#np.save("Xtrain_features.npy", feature_train)
-#np.save("Xtest_features.npy", feature_test)
-feature_train = np.load("Xtrain_features.npy")
-feature_test = np.load("Xtest_features.npy")
+feature_train = fg.featureExtraction("PUCK_xTrainC.npy", "X_train_UCI_features.npy")
+feature_test = fg.featureExtraction("PUCK_xTestC.npy", "X_test_UCI_features.npy")
+np.save("Xtrain_features_puck.npy", feature_train)
+np.save("Xtest_features_puck.npy", feature_test)
+feature_train = np.load("Xtrain_features_puck.npy")
+feature_test = np.load("Xtest_features_puck.npy")
 
-label_test = np.load("UCI_HAR_test_labels.npy")
-label_train = np.load("UCI_HAR_train_labels.npy")
+label_test = np.load("PUCK_yTestC.npy")
+label_train = np.load("PUCK_yTrainC.npy")
+'''
+for k in range(len(label_train)):
+	if label_train[k]>2:
+		label_train[k]=3
+for l in range(len(label_test)):
+	if label_test[l]>2:
+		label_test[l]=3
+'''
+
 j = 350
 k = 0
-s = []
-while j<400:
-	w = []
-	k=0
-	while k<10:
-		pca = PCA(n_components=j)    
-		Xtrain = pca.fit(feature_train).transform(feature_train)
+pca = PCA(n_components=j)    
+Xtrain = pca.fit(feature_train).transform(feature_train)
 
-		Xtest = pca.transform(feature_test)
-		w.append(svm.LinearSVC().fit(Xtrain, label_train).score(Xtest, label_test))
-		k+=1
-	s.append((max(w),j))
-	j+=2
-print s
+Xtest = pca.transform(feature_test)
+y_pred =  svm.LinearSVC().fit(Xtrain,label_train).predict(Xtest)
+cm = confusion_matrix(label_test,y_pred)
+print cm
+print svm.LinearSVC().fit(Xtrain, label_train).score(Xtest, label_test)
 
 
 
