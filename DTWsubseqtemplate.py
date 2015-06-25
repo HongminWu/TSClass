@@ -51,14 +51,28 @@ if __name__ == "__main__":
     ycluster10 = np.load('ycluster10.npy')
     trunc_cluster10 = np.load('trunc_cluster10.npy')
 
-    n_cluster10 = len(cluster10)
+    # horizontal shifting
+
+    cluster10_trunc = []
+    l = len(cluster10)
+    for c in range(l):
+        cluster = []
+        n = len(cluster10[c])
+        for i in range(n):
+            trunc = trunc_cluster10[c][0,i]
+            cluster.append(cluster10[c][i][trunc:(103+trunc)]) # length 128-25, minimum length
+        cluster = np.array(cluster)
+        cluster10_trunc.append(cluster)
+    cluster10_trunc = np.array(cluster10_trunc)
+
+    n_cluster10 = len(cluster10_trunc)
     dba_avgs = []
     for c in range(n_cluster10):
         dbamodel = dba.DBA(max_iter=30, verbose=True, tol=1e-4)
-        dba_avg = dbamodel.compute_average(cluster10[c], nstarts=5)
+        dba_avg = dbamodel.compute_average(cluster10_trunc[c], nstarts=5)
         dba_avgs.append(dba_avg)
 
-    np.save('dba_templates.npy', dba_avgs)
+    np.save('dba_templates_trunc.npy', dba_avgs)
     #Plot.plot_template_many(dba_avgs, cluster10, ycluster10, 'plot/dba_templates', file=False)
 
     # horizontal alignment using trunc_cluster10
