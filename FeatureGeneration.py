@@ -174,7 +174,7 @@ def featureExtraction(file1,file2):
 	featuresTS = []
 	multTSAll= np.load(file1)
 	for TS in range(len(multTSAll)):
-		features=np.concatenate((np.array(getFeaturesFFT(getFFT(transformTS(multTSAll[TS])))),AR(TS,file2), 
+		features=np.concatenate((np.array(getFeaturesFFT(getFFT(transformTS(multTSAll[TS])))), 
 			np.array(getFeatures(transformTS(multTSAll[TS]))), np.array(getFeatures(firstDiffTS(transformTS(multTSAll[TS]))))))
 		featuresTS.append(features)	
 	return featuresTS 

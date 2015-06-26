@@ -64,6 +64,16 @@ def readFeatures(file1,file2):
     np.save(file2,x)
     return x
 
+def combineNPY(files):
+	bigarray = np.load(files[0])	
+	for f in range(1,len(files)):
+		temp = np.load(files[f])
+		bigarray = np.concatenate((bigarray,temp))
+	np.save("distances_hclust_average_new_dist_train_all.npy",bigarray)
+	return bigarray	
+
+files = ["distances_hclust_average_new_dist_train1.npy", "distances_hclust_average_new_dist_train2.npy", "distances_hclust_average_new_dist_train3.npy", "distances_hclust_average_new_dist_train4.npy", "distances_hclust_average_new_dist_train5.npy"]
+combineNPY(files)
 #readFeatures("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/X_test.txt", "X_test_UCI_features.npy")
 #readLabels("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/y_test.txt", "UCI_HAR_test_labels.npy")
 
