@@ -28,11 +28,13 @@ if __name__ == "__main__":
     cluster = np.load('Distances/cluster.npy')
     ycluster = np.load('Distances/ycluster.npy')
     trunc_cluster = np.load('Distances/trunc_cluster.npy')
+    dist_cluster = np.load('Distances/dist_cluster.npy')
 
     n_cluster = len(cluster)
     cluster10 = []
     ycluster10 = []
     trunc_cluster10 = []
+    dist_cluster10 = []
 
     for c in range(n_cluster): # retain clusters with at least 10 samples
         if len(cluster[c])>=10:
@@ -40,10 +42,12 @@ if __name__ == "__main__":
             cluster10.append(cluster[c])
             ycluster10.append(ycluster[c])
             trunc_cluster10.append(trunc_cluster[c])
+            dist_cluster10.append(dist_cluster[c])
 
     np.save('Distances/cluster10.npy', cluster10)
     np.save('Distances/ycluster10.npy', ycluster10)
     np.save('Distances/trunc_cluster10.npy', trunc_cluster10)
+    np.save('Distances/dist_cluster10.npy', dist_cluster10)
     '''
     # dba templates
 

@@ -28,8 +28,8 @@ def DTWsubseq(s, t, trunc = 25, bandwidth = 5, pnorm = 1):
 
 if __name__ == "__main__":
 
-    Xtrain = np.load('xTrainC.npy')
-    Ytrain = np.load('yTrainC.npy')
+    Xtrain = np.load('xTrainSyn.npy')
+    Ytrain = np.load('yTrainSyn.npy')
 
     dist_mats = []
     trunc_mats = []
@@ -58,8 +58,8 @@ if __name__ == "__main__":
     dist_mats.append(dist_mat)
     trunc_mats.append(trunc_mat)
 
-    np.save('dist_mats.npy', dist_mats)
-    np.save('trunc_mats.npy', trunc_mats)
+    np.save('syn_dist_mats.npy', dist_mats)
+    np.save('syn_trunc_mats.npy', trunc_mats)
 
 '''
     # Hierarchical clustering
@@ -76,6 +76,7 @@ if __name__ == "__main__":
     cluster = [] # cluster for all activities
     ycluster = [] # cluster label
     trunc_cluster = [] # trunc shifts within cluster
+    dist_cluster = []
     for act in range(6):
         Xtrain_act = Xtrain[Ytrain==act]
         data_link = linkage(dist_mat[act], method='complete')
@@ -85,10 +86,12 @@ if __name__ == "__main__":
             cluster.append(Xtrain_act[ind==c])
             ycluster.append(act)
             trunc_cluster.append(trunc_mat[act][ind==c][:,ind==c])
+            dist_cluster.append(dist_mat[act][ind==c][:,ind==c])
 
-    np.save('cluster.npy', cluster)
-    np.save('ycluster.npy', ycluster)
-    np.save('trunc_cluster.npy', trunc_cluster)
+    np.save('Distances/cluster.npy', cluster)
+    np.save('Distances/ycluster.npy', ycluster)
+    np.save('Distances/trunc_cluster.npy', trunc_cluster)
+    np.save('Distances/dist_cluster.npy', dist_cluster)
 
     num_c = ycluster.__len__()
     for c in range(num_c):
