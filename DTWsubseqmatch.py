@@ -55,8 +55,8 @@ if __name__ == "__main__":
                 if j<i:
                     dist_mat[i,j] = dist_mat[j,i]
 
-    dist_mats.append(dist_mat)
-    trunc_mats.append(trunc_mat)
+        dist_mats.append(dist_mat)
+        trunc_mats.append(trunc_mat)
 
     np.save('syn_dist_mats.npy', dist_mats)
     np.save('syn_trunc_mats.npy', trunc_mats)
