@@ -61,17 +61,23 @@ if __name__ == "__main__":
     np.save('syn_dist_mats.npy', dist_mats)
     np.save('syn_trunc_mats.npy', trunc_mats)
 
+
 '''
+
     # Hierarchical clustering
 
     import os
     os.chdir('/home/wenyu/Dropbox/TSCLASS')
 
-    Xtrain = np.load('MotionData/xTrainC.npy')
-    Ytrain = np.load('MotionData/yTrainC.npy')
+    dataloc = 'Synthetic'
+    distloc = 'Syn Distances'
+    plotloc = 'Syn plot'
 
-    dist_mat = np.load('Distances/dist_mats.npy')
-    trunc_mat = np.load('Distances/trunc_mats.npy')
+    Xtrain = np.load(dataloc+'/xTrainSyn.npy')
+    Ytrain = np.load(dataloc+'/yTrainSyn.npy')
+
+    dist_mat = np.load(distloc+'/syn_dist_mats.npy')
+    trunc_mat = np.load(distloc+'/syn_trunc_mats.npy')
 
     cluster = [] # cluster for all activities
     ycluster = [] # cluster label
@@ -88,14 +94,15 @@ if __name__ == "__main__":
             trunc_cluster.append(trunc_mat[act][ind==c][:,ind==c])
             dist_cluster.append(dist_mat[act][ind==c][:,ind==c])
 
-    np.save('Distances/cluster.npy', cluster)
-    np.save('Distances/ycluster.npy', ycluster)
-    np.save('Distances/trunc_cluster.npy', trunc_cluster)
-    np.save('Distances/dist_cluster.npy', dist_cluster)
+    np.save(dataloc+'/syn_cluster.npy', cluster)
+    np.save(dataloc+'/syn_ycluster.npy', ycluster)
+    np.save(dataloc+'/syn_trunc_cluster.npy', trunc_cluster)
+    np.save(dataloc+'/syn_dist_cluster.npy', dist_cluster)
 
     num_c = ycluster.__len__()
     for c in range(num_c):
         Plot.plot_raw(cluster[c], np.array(ycluster[c]*cluster[c].shape[0]),
-                      'plot/act'+str(ycluster[c])+'_hcluster'+str(c), 5, act=6, file=False)
+                      plotloc+'/act'+str(ycluster[c])+'_hcluster'+str(c), 5, act=6, file=False)
+
 
 '''
