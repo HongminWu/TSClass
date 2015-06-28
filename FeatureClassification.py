@@ -7,10 +7,10 @@ import FeatureGeneration as fg
 import Reader as r
 from sklearn.metrics import confusion_matrix
 
-feature_train = fg.featureExtraction("PUCK_xTrainC.npy", "X_train_UCI_features.npy")
-feature_test = fg.featureExtraction("PUCK_xTestC.npy", "X_test_UCI_features.npy")
-np.save("Xtrain_features_puck.npy", feature_train)
-np.save("Xtest_features_puck.npy", feature_test)
+#feature_train = fg.featureExtraction("PUCK_xTrainC.npy", "X_train_UCI_features.npy")
+#feature_test = fg.featureExtraction("PUCK_xTestC.npy", "X_test_UCI_features.npy")
+#np.save("Xtrain_features_puck.npy", feature_train)
+#np.save("Xtest_features_puck.npy", feature_test)
 feature_train = np.load("Xtrain_features_puck.npy")
 feature_test = np.load("Xtest_features_puck.npy")
 
