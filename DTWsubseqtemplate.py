@@ -43,26 +43,3 @@ if __name__ == "__main__":
     np.save('syn_dba_templates_trunc.npy', dba_avgs)
     #Plot.plot_template_many(dba_avgs, cluster10, ycluster10, 'plot/dba_templates', file=False)
 
-    # horizontal alignment using trunc_cluster10
-
-
-
-'''
-    align_clusters = []
-    avgs = []
-
-    for c in range(n_cluster):
-        if len(cluster[c])>=10:
-        print 'cluster'+str(c)
-            cluster10.append(cluster[c])
-            ycluster10.append(ycluster[c])
-            align_cluster, avg = template(cluster[c], trunc_cluster[c])
-            align_clusters.append(align_cluster)
-            avgs.append(avg)
-
-    np.save('Templates/align_clusters.npy', align_clusters)
-    np.save('Templates/templates', avgs)
-
-    Plot.plot_template_many(avgs, align_clusters, ycluster, 'plot/template', file=False)
-
-'''
