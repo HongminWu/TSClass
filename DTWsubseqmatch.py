@@ -46,7 +46,7 @@ if __name__ == "__main__":
             for j in range(n):
                 if j>i:
                     print 'act'+str(act)+'row'+str(i)+' column'+str(j)
-                    best_trunc, best_dist = DTWsubseq(Xtrain_act[j],Xtrain_act[i])
+                    best_trunc, best_dist = DTWsubseq(Xtrain_act[j],Xtrain_act[i],bandwidth=10)
                     trunc_mat[i,j] = best_trunc
                     dist_mat[i,j] = best_dist
 
@@ -58,8 +58,8 @@ if __name__ == "__main__":
         dist_mats.append(dist_mat)
         trunc_mats.append(trunc_mat)
 
-    np.save('syn_dist_mats.npy', dist_mats)
-    np.save('syn_trunc_mats.npy', trunc_mats)
+    np.save('syn_dist_mats_bw10.npy', dist_mats)
+    #np.save('syn_trunc_mats.npy', trunc_mats)
 
 
 '''
@@ -94,10 +94,10 @@ if __name__ == "__main__":
             trunc_cluster.append(trunc_mat[act][ind==c][:,ind==c])
             dist_cluster.append(dist_mat[act][ind==c][:,ind==c])
 
-    np.save(dataloc+'/syn_cluster.npy', cluster)
-    np.save(dataloc+'/syn_ycluster.npy', ycluster)
-    np.save(dataloc+'/syn_trunc_cluster.npy', trunc_cluster)
-    np.save(dataloc+'/syn_dist_cluster.npy', dist_cluster)
+    np.save(distloc+'/syn_cluster.npy', cluster)
+    np.save(distloc+'/syn_ycluster.npy', ycluster)
+    np.save(distloc+'/syn_trunc_cluster.npy', trunc_cluster)
+    np.save(distloc+'/syn_dist_cluster.npy', dist_cluster)
 
     num_c = ycluster.__len__()
     for c in range(num_c):
