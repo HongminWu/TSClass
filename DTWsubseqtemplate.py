@@ -14,7 +14,7 @@ if __name__ == "__main__":
     import dba
 
     # dba templates
-
+    '''
     cluster10 = np.load('syn_cluster10.npy')
     ycluster10 = np.load('syn_ycluster10.npy')
     trunc_cluster10 = np.load('syn_trunc_cluster10.npy')
@@ -42,4 +42,33 @@ if __name__ == "__main__":
 
     np.save('syn_dba_templates_trunc.npy', dba_avgs)
     #Plot.plot_template_many(dba_avgs, cluster10, ycluster10, 'plot/dba_templates', file=False)
+    '''
 
+    cluster10 = np.load('cluster.npy')
+    ycluster10 = np.load('ycluster.npy')
+
+    n_cluster10 = len(cluster10)
+    dba_avgs = []
+    for c in range(n_cluster10):
+        dbamodel = dba.DBA(max_iter=30, verbose=True, tol=1e-4)
+        dba_avg = dbamodel.compute_average(cluster10[c], nstarts=1)
+        dba_avgs.append(dba_avg)
+
+    np.save('dba_templates.npy', dba_avgs)
+    #Plot.plot_template_many(dba_avgs, cluster10, ycluster10, 'plot/dba_templates', file=False)
+
+
+    # orig dtw
+
+    cluster10 = np.load('cluster_original.npy')
+    ycluster10 = np.load('ycluster_original.npy')
+
+    n_cluster10 = len(cluster10)
+    dba_avgs = []
+    for c in range(n_cluster10):
+        dbamodel = dba.DBA(max_iter=30, verbose=True, tol=1e-4)
+        dba_avg = dbamodel.compute_average(cluster10[c], nstarts=1)
+        dba_avgs.append(dba_avg)
+
+    np.save('dba_templates_orig.npy', dba_avgs)
+    #Plot.plot_template_many(dba_avgs, cluster10, ycluster10, 'plot/dba_templates', file=False)
