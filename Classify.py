@@ -6,9 +6,15 @@ import sklearn.svm as svm
 from sklearn.metrics import confusion_matrix
 from sklearn.decomposition import PCA
 
-dist_clusts = np.load("dist_cluster.npy")
-clusters = np.load("cluster.npy")
-cluster_labels = np.load("ycluster.npy")
+
+############################# CHANGE THESE###############################
+
+dist_clusts = np.load("syn_dist_cluster_orig.npy")
+clusters = np.load("syn_cluster_orig.npy")
+cluster_labels = np.load("syn_ycluster_orig.npy")
+
+#########################################################################
+
 
 #print len(dist_clusts[0]), len(dist_clusts[0][0]), len(dist_clusts[0][0][0])
 #print len(clusters[0])
@@ -31,14 +37,25 @@ def buildTemplates():
 	for l in clusters:
 		cluster_templates_aligned.append(ts.average(l))
 
-	np.save("cluster_mindist_templates_hclust_average_new_dist.npy",cluster_templates_aligned)
+############################# CHANGE THESE###############################
+
+	np.save("syn_cluster_mindist_templates_hclust_average_orig_dist.npy",cluster_templates_aligned)
+#########################################################################
+
 	return cluster_templates_aligned
 
 def classifySVM():
-	dist_features_train = np.load("distances_hclust_mindist_average_new_dist_train_all.npy")
-	dist_features_test = np.load("distances_hclust_mindist_average_new_dist_test_all.npy")
-	yTest = np.load("yTestC.npy")
-	yTrain = np.load("yTrainC.npy")
+############################# CHANGE THESE###############################
+
+	dist_features_train = np.load("syn_distances_hclust_mindist_average_orig_origdist_train0.npy")
+	dist_features_test = np.load("syn_distances_hclust_mindist_average_orig_origdist_test0.npy")
+
+
+	yTest = np.load("yTestSyn.npy")
+	yTrain = np.load("yTrainSyn.npy")
+
+#########################################################################
+
 	test_labels = yTest
 	train_labels = yTrain
 	maxs = None
@@ -46,34 +63,36 @@ def classifySVM():
 	Xtrain = dist_features_train
 	Xtest = dist_features_test
 	q = []
-	for j in range(len(dist_features_train[0])):
-		pca = PCA(n_components=j)    
-		Xtrain = pca.fit(dist_features_train).transform(dist_features_train)
+	#pca = PCA(n_components=j)    
+	#Xtrain = pca.fit(dist_features_train).transform(dist_features_train)
 
-		Xtest = pca.transform(dist_features_test)
-		'''
-		for k in range(len(test_labels)):
-		    if test_labels[k]>2:
-			test_labels[k]=3
-		for w in range(len(cluster_labels)):
-		    if cluster_labels[w]>2:
+	#Xtest = pca.transform(dist_features_test)
+	'''	
+	for k in range(len(test_labels)):
+	    if test_labels[k]>2:
+		test_labels[k]=3
+	for w in range(len(cluster_labels)):
+	    if cluster_labels[w]>2:
 		cluster_labels[w]=3
 
-		for k in range(len(train_labels)):
-		    if train_labels[k]>2:
-			train_labels[k]=3
-		for w in range(len(cluster_labels)):
-		    if cluster_labels[w]>2:
-			cluster_labels[w]=3
-		'''
-		s = 0
-		cm=0
-		ss = svm.LinearSVC().fit(Xtrain,yTrain)
-		y_pred = ss.predict(Xtest)
-		cm = confusion_matrix(yTest,y_pred)
-		q.append(ss.score(Xtest,yTest))
-		print j, ss.score(Xtest,yTest)
-	return np.argmax(q). max(q)
+	for k in range(len(train_labels)):
+	    if train_labels[k]>2:
+		train_labels[k]=3
+	for w in range(len(cluster_labels)):
+	    if cluster_labels[w]>2:
+		cluster_labels[w]=3
+	'''
+	s = 0
+	cm=0
+	ss = svm.LinearSVC(random_state=420).fit(Xtrain,yTrain)
+	y_pred = ss.predict(Xtest)
+	cm = confusion_matrix(yTest,y_pred)
+	s = ss.score(Xtest,yTest)
+	#q.append(ss.score(Xtest,yTest))
+	#print j, ss.score(Xtest,yTest)
+	return s,cm
+
+
 	'''
 	for k in range(100):
 		ss = svm.LinearSVC().fit(Xtrain,yTrain)
@@ -112,11 +131,18 @@ def classify():
 def getDistances(test,test_labels,train,train_labels,num):
 	testTS = np.load(test)
 	test_labels = np.load(test_labels)
+
+############################# CHANGE THESE###############################
+
 	
-	#cluster_templates =  buildTemplates()
-	#cluster_templates = np.load("cluster_templates_hclust_average_new_dist.npy",)
-	cluster_templates = np.load("cluster_mindist_templates_hclust_average_new_dist.npy")
+	cluster_templates =  buildTemplates()
+	#cluster_templates = np.load("syn_cluster_templates_hclust_average_new_dist.npy",)
+	#cluster_templates = np.load("syn_cluster10_mindist_templates_hclust_average_new_dist.npy")
 	#build predited labels'
+
+#########################################################################
+
+
 	distancefeatures = []
 	predicted_labels = []
 	i=0
@@ -125,11 +151,16 @@ def getDistances(test,test_labels,train,train_labels,num):
 		dist = []
 		print "sample", i
 		for template in cluster_templates:
-			dist.append(ts.DTWsubseq(sample,template)[1])
+			dist.append(ts.DTWDistance(sample,template)[0])
 		distancefeatures.append(dist)
 		#predicted_labels.append(cluster_labels[np.argmin(dist)])
 		i+=1
-	np.save("distances_hclust_mindist_average_new_dist_test"+str(num)+".npy",distancefeatures)
+
+############################# CHANGE THESE###############################
+
+	np.save("syn_distances_hclust_mindist_average_orig_origdist_test"+str(num)+".npy",distancefeatures)
+
+#########################################################################
 	
 	dist_features_train = []
 	xTrain = np.load(train)
@@ -137,10 +168,13 @@ def getDistances(test,test_labels,train,train_labels,num):
 	for k in xTrain:
 		dist = []
 		for temp in cluster_templates:
-			dist.append(ts.DTWsubseq(k,temp)[1])
+			dist.append(ts.DTWDistance(k,temp)[0])
 		dist_features_train.append(dist)
-	np.save("distances_hclust_mindist_average_new_dist_train"+str(num)+".npy",dist_features_train)
 
+############################# CHANGE THESE###############################
+
+	np.save("syn_distances_hclust_mindist_average_orig_origdist_train"+str(num)+".npy",dist_features_train)
+#########################################################################
 	'''
 	for k in range(len(test_labels)):
 	    if test_labels[k]>2:
@@ -157,10 +191,25 @@ def getDistances(test,test_labels,train,train_labels,num):
 
 #buildTemplates() 
 
-print classifySVM()
-#print getDistances("xTestC_5.npy","yTestC_5.npy","xTrainC_5.npy", "yTrainC_5.npy",5)
-#print classify("PUCK_xTestC_5.npy", "PUCK_yTestC_5.npy",5)
+############################# CHANGE THIS FOR FILE NUMBER###############################
 
+num=1
+
+#########################################################################################
+
+
+############################### USE THIS IF CLASSIFYING##################################
+
+print classifySVM()
+
+#########################################################################################
+
+############################### USE THIS TO CALCULATE THE DISTANCES #####################
+
+#print getDistances("xTestSyn.npy", "yTestSyn.npy", "xTrainSyn.npy","yTrainSyn.npy",0)
+#print getDistances("xTestC_"+str(num)+".npy","yTestC_"+str(num)+".npy","xTrainC_"+str(num)+".npy", "yTrainC_"+str(num)+".npy",num)
+
+################################### USE THIS TO SPLIT DATA IF YOU NEED TO################
 
 #np.save("PUCK_xTrainC_1.npy",np.load("PUCK_xTrainC.npy")[0:int(len(np.load("PUCK_xTrainC.npy"))/5)])
 #np.save("PUCK_xTrainC_2.npy",np.load("PUCK_xTrainC.npy")[int(len(np.load("PUCK_xTrainC.npy"))/5):int(len(np.load("PUCK_xTrainC.npy"))*2/5)])
