@@ -69,10 +69,14 @@ def combineNPY(files):
 	for f in range(1,len(files)):
 		temp = np.load(files[f])
 		bigarray = np.concatenate((bigarray,temp))
-	np.save("distances_hclust_average_new_dist_train_all.npy",bigarray)
+	np.save("distances_hclust10_mindist_average_new_dist_train_all.npy",bigarray)
 	return bigarray	
 
-files = ["distances_hclust_average_new_dist_train1.npy", "distances_hclust_average_new_dist_train2.npy", "distances_hclust_average_new_dist_train3.npy", "distances_hclust_average_new_dist_train4.npy", "distances_hclust_average_new_dist_train5.npy"]
+#files = ["distances_hclust_average_new_dist_train1.npy", "distances_hclust_average_new_dist_train2.npy", "distances_hclust_average_new_dist_train3.npy", "distances_hclust_average_new_dist_train4.npy", "distances_hclust_average_new_dist_train5.npy"]
+#files = ["distances_hclust_dba_average_new_dist_train1.npy", "distances_hclust_dba_average_new_dist_train2.npy", "distances_hclust_dba_average_new_dist_train3.npy", "distances_hclust_dba_average_new_dist_train4.npy", "distances_hclust_dba_average_new_dist_train5.npy"]
+#files = ["PUCK_distances_hclust_dba_average_new_dist_test1.npy", "PUCK_distances_hclust_dba_average_new_dist_test2.npy", "PUCK_distances_hclust_dba_average_new_dist_test3.npy", "PUCK_distances_hclust_dba_average_new_dist_test4.npy", "PUCK_distances_hclust_dba_average_new_dist_test5.npy"]
+
+files = ["distances_hclust10_mindist_average_new_dist_train1.npy", "distances_hclust10_mindist_average_new_dist_train2.npy", "distances_hclust10_mindist_average_new_dist_train3.npy", "distances_hclust10_mindist_average_new_dist_train4.npy", "distances_hclust10_mindist_average_new_dist_train5.npy"]
 combineNPY(files)
 #readFeatures("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/X_test.txt", "X_test_UCI_features.npy")
 #readLabels("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/y_test.txt", "UCI_HAR_test_labels.npy")

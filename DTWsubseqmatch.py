@@ -28,8 +28,8 @@ def DTWsubseq(s, t, trunc = 25, bandwidth = 5, pnorm = 1):
 
 if __name__ == "__main__":
 
-    Xtrain = np.load('xTrainC.npy')
-    Ytrain = np.load('yTrainC.npy')
+    Xtrain = np.load('xTrainSyn.npy')
+    Ytrain = np.load('yTrainSyn.npy')
 
     dist_mats = []
     trunc_mats = []
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             for j in range(n):
                 if j>i:
                     print 'act'+str(act)+'row'+str(i)+' column'+str(j)
-                    best_trunc, best_dist = DTWsubseq(Xtrain_act[j],Xtrain_act[i])
+                    best_trunc, best_dist = DTWsubseq(Xtrain_act[j],Xtrain_act[i],bandwidth=10)
                     trunc_mat[i,j] = best_trunc
                     dist_mat[i,j] = best_dist
 
@@ -55,27 +55,34 @@ if __name__ == "__main__":
                 if j<i:
                     dist_mat[i,j] = dist_mat[j,i]
 
-    dist_mats.append(dist_mat)
-    trunc_mats.append(trunc_mat)
+        dist_mats.append(dist_mat)
+        trunc_mats.append(trunc_mat)
 
-    np.save('dist_mats.npy', dist_mats)
-    np.save('trunc_mats.npy', trunc_mats)
+    np.save('syn_dist_mats_bw10.npy', dist_mats)
+    #np.save('syn_trunc_mats.npy', trunc_mats)
+
 
 '''
+
     # Hierarchical clustering
 
     import os
     os.chdir('/home/wenyu/Dropbox/TSCLASS')
 
-    Xtrain = np.load('MotionData/xTrainC.npy')
-    Ytrain = np.load('MotionData/yTrainC.npy')
+    dataloc = 'Synthetic'
+    distloc = 'Syn Distances'
+    plotloc = 'Syn plot'
 
-    dist_mat = np.load('Distances/dist_mats.npy')
-    trunc_mat = np.load('Distances/trunc_mats.npy')
+    Xtrain = np.load(dataloc+'/xTrainSyn.npy')
+    Ytrain = np.load(dataloc+'/yTrainSyn.npy')
+
+    dist_mat = np.load(distloc+'/syn_dist_mats.npy')
+    trunc_mat = np.load(distloc+'/syn_trunc_mats.npy')
 
     cluster = [] # cluster for all activities
     ycluster = [] # cluster label
     trunc_cluster = [] # trunc shifts within cluster
+    dist_cluster = []
     for act in range(6):
         Xtrain_act = Xtrain[Ytrain==act]
         data_link = linkage(dist_mat[act], method='complete')
@@ -85,14 +92,37 @@ if __name__ == "__main__":
             cluster.append(Xtrain_act[ind==c])
             ycluster.append(act)
             trunc_cluster.append(trunc_mat[act][ind==c][:,ind==c])
+            dist_cluster.append(dist_mat[act][ind==c][:,ind==c])
 
-    np.save('cluster.npy', cluster)
-    np.save('ycluster.npy', ycluster)
-    np.save('trunc_cluster.npy', trunc_cluster)
+    np.save(distloc+'/syn_cluster.npy', cluster)
+    np.save(distloc+'/syn_ycluster.npy', ycluster)
+    np.save(distloc+'/syn_trunc_cluster.npy', trunc_cluster)
+    np.save(distloc+'/syn_dist_cluster.npy', dist_cluster)
 
     num_c = ycluster.__len__()
     for c in range(num_c):
         Plot.plot_raw(cluster[c], np.array(ycluster[c]*cluster[c].shape[0]),
-                      'plot/act'+str(ycluster[c])+'_hcluster'+str(c), 5, act=6, file=False)
+                      plotloc+'/act'+str(ycluster[c])+'_hcluster'+str(c), 5, act=6, file=False)
+
+
+
+    cluster10 = []
+    ycluster10 = []
+    trunc_cluster10 = []
+    dist_cluster10 = []
+
+    for c in range(num_c): # retain clusters with at least 10 samples
+        if len(cluster[c])>=10:
+            print 'cluster'+str(c)
+            cluster10.append(cluster[c])
+            ycluster10.append(ycluster[c])
+            trunc_cluster10.append(trunc_cluster[c])
+            dist_cluster10.append(dist_cluster[c])
+
+    np.save(distloc+'/syn_cluster10.npy', cluster10)
+    np.save(distloc+'/syn_ycluster10.npy', ycluster10)
+    np.save(distloc+'/syn_trunc_cluster10.npy', trunc_cluster10)
+    np.save(distloc+'/syn_dist_cluster10.npy', dist_cluster10)
+
 
 '''
