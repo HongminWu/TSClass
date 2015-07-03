@@ -216,3 +216,25 @@ print classifySVM()
 #np.save("PUCK_xTrainC_3.npy",np.load("PUCK_xTrainC.npy")[int(len(np.load("PUCK_xTrainC.npy"))*2/5):int(len(np.load("PUCK_xTrainC.npy"))*3/5)])
 #np.save("PUCK_xTrainC_4.npy",np.load("PUCK_xTrainC.npy")[int(len(np.load("PUCK_xTrainC.npy"))*3/5):int(len(np.load("PUCK_xTrainC.npy"))*4/5)])
 #np.save("PUCK_xTrainC_5.npy",np.load("PUCK_xTrainC.npy")[int(len(np.load("PUCK_xTrainC.npy"))*4/5):int(len(np.load("PUCK_xTrainC.npy")))])	
+
+def templateAssessment(distanceFile, templateLabelFile, yLabelFile):
+	distance = np.load(distanceFile)
+	templateLabels = np.load(templateLabelFile)
+	yLabel = np.load(yLabelFile)
+
+	truePos = [0 for range(len(distance))]
+	falsePos = [0 for range(len(distance))]
+
+	for i in range(len(distance)):
+		cat = np.argmin(distance[i])
+		if yLabel[i] == templateLabels[cat]:
+			truePos[cat] = truePas[cat]+1
+		else:
+			falsePos[cat] = falsePos[cat]+1
+
+	ratio = [truePos[i]*1.0/(truePos[i]+falsePos[i]) for i in range(len(templateLabels))]
+	print ratio
+	return truePos, falsePos, ratio
+
+
+
