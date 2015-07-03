@@ -170,7 +170,7 @@ def firstDiffTS(x):
 
 
 
-def featureExtraction(file1,file2):
+def featureExtraction(file1):
 	featuresTS = []
 	multTSAll= np.load(file1)
 	for TS in range(len(multTSAll)):

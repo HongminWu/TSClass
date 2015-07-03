@@ -7,8 +7,8 @@ import FeatureGeneration as fg
 import Reader as r
 from sklearn.metrics import confusion_matrix
 
-#feature_train = fg.featureExtraction("xTrainSyn.npy", "X_train_UCI_features.npy")
-#feature_test = fg.featureExtraction("xTestSyn.npy", "X_test_UCI_features.npy")
+#feature_train = fg.featureExtraction("xTrainSyn.npy")
+#feature_test = fg.featureExtraction("xTestSyn.npy")
 #np.save("Xtrain_features_syn.npy", feature_train)
 #np.save("Xtest_features_syn.npy", feature_test)
 feature_train = np.load("Xtrain_features_syn.npy")
