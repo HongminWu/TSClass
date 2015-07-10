@@ -14,7 +14,7 @@ print nTemplate
 syn = []
 synLabel = []
 for ACT in range(6):
-	for TIME in range(200):
+	for TIME in range(500):
 		k = random.randint(0, nTemplate-1)
 		while templateLabels[k]!= ACT:
 			k = random.randint(0, nTemplate-1)
