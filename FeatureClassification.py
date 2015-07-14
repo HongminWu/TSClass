@@ -11,11 +11,11 @@ from sklearn.metrics import confusion_matrix
 #feature_test = fg.featureExtraction("xTestSyn2.npy")
 #np.save("Xtrain_features_Syn2.npy", feature_train)
 #np.save("Xtest_features_Syn2.npy", feature_test)
-feature_train = np.load("Xtrain_features_Syn2.npy")
-feature_test = np.load("Xtest_features_Syn2.npy")
-
-label_test = np.load("yTestSyn2.npy")
-label_train = np.load("yTrainSyn2.npy")
+feature_train = np.load("Xtrain_features.npy")
+feature_test = np.load("Xtest_features.npy")
+print len(feature_train[0])
+label_test = np.load("yTestC.npy")
+label_train = np.load("yTrainC.npy")
 '''
 for k in range(len(label_train)):
 	if label_train[k]>2:
@@ -31,16 +31,17 @@ Xtest=feature_test
 #j = range(1,len(feature_train[0]))
 k = 0
 #j=350
-for j in range(50,len(feature_train[0])):
-	pca = PCA(n_components=j)    
-	Xtrain = pca.fit(feature_train).transform(feature_train)
-	ss = svm.LinearSVC(random_state=420)
-	Xtest = pca.transform(feature_test)
-	y_pred =  ss.fit(Xtrain,label_train).predict(Xtest)
-	cm = confusion_matrix(label_test,y_pred)
-	q.append(cm)
-	#print ss.fit(Xtrain, label_train).score(Xtest, label_test)
-	p.append(ss.fit(Xtrain, label_train).score(Xtest, label_test))
+#for j in range(115, len(feature_train[0])):
+#for j in range(301,len(Xtrain[0])):
+pca = PCA(n_components=252)    
+Xtrain = pca.fit(feature_train).transform(feature_train)
+ss = svm.LinearSVC(random_state=420)
+Xtest = pca.transform(feature_test)
+y_pred =  ss.fit(Xtrain,label_train).predict(Xtest)
+cm = confusion_matrix(label_test,y_pred)
+q.append(cm)
+#print j, ss.fit(Xtrain, label_train).score(Xtest, label_test)
+p.append(ss.fit(Xtrain, label_train).score(Xtest, label_test))
 print np.argmax(p),max(p), q[np.argmax(p)]
 
 

@@ -64,21 +64,36 @@ def readFeatures(file1,file2):
     np.save(file2,x)
     return x
 
-def combineNPY(files):
+def combineNPY(files,save):
 	bigarray = np.load(files[0])	
 	for f in range(1,len(files)):
 		temp = np.load(files[f])
 		bigarray = np.concatenate((bigarray,temp))
-	np.save("dist/distances_hclust_mindist_dba_average_origdist_test_all.npy",bigarray)
+	np.save(save,bigarray)
 	return bigarray	
 
 #files = ["distances_hclust_average_new_dist_train1.npy", "distances_hclust_average_new_dist_train2.npy", "distances_hclust_average_new_dist_train3.npy", "distances_hclust_average_new_dist_train4.npy", "distances_hclust_average_new_dist_train5.npy"]
 #files = ["distances_hclust_dba_average_new_dist_train1.npy", "distances_hclust_dba_average_new_dist_train2.npy", "distances_hclust_dba_average_new_dist_train3.npy", "distances_hclust_dba_average_new_dist_train4.npy", "distances_hclust_dba_average_new_dist_train5.npy"]
 #files = ["PUCK_distances_hclust_dba_average_new_dist_test1.npy", "PUCK_distances_hclust_dba_average_new_dist_test2.npy", "PUCK_distances_hclust_dba_average_new_dist_test3.npy", "PUCK_distances_hclust_dba_average_new_dist_test4.npy", "PUCK_distances_hclust_dba_average_new_dist_test5.npy"]
 
-files = ["dist/distances_hclust_mindist_dba_average_origdist_test1.npy", "dist/distances_hclust_mindist_dba_average_origdist_test2.npy", "dist/distances_hclust_mindist_dba_average_origdist_test3.npy", "dist/distances_hclust_mindist_dba_average_origdist_test4.npy", "dist/distances_hclust_mindist_dba_average_origdist_test5.npy"]
 
-combineNPY(files)
+files = []
+
+template = "dist/syn2_distance_hclust_dba_average_origdist_train"
+
+save = template+"_all.npy"
+
+num = 10
+
+for f in range(num):
+	files.append(template+str(f)+".npy")
+
+
+combineNPY(files,save)
+
+#files = ["dist/distance_hclust0.25_dba_average_origdist_train1.npy", "dist/distance_hclust0.25_dba_average_origdist_train2.npy", "dist/distance_hclust0.25_dba_average_origdist_train3.npy", "dist/distance_hclust0.25_dba_average_origdist_train4.npy", "dist/distance_hclust0.25_dba_average_origdist_train5.npy"]
+
+#combineNPY(files)
 #readFeatures("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/X_test.txt", "X_test_UCI_features.npy")
 #readLabels("/Users/skyler/Desktop/Cornell First Year/CS6780 Project/Code/UCI HAR Dataset/test/y_test.txt", "UCI_HAR_test_labels.npy")
 
