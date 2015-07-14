@@ -244,7 +244,7 @@ print getDistances("Syn5/xTestSyn5_"+str(num)+".npy","Syn5/yTestSyn5_"+str(num)+
 
 ################################### USE THIS TO SPLIT DATA IF YOU NEED TO################
 '''
-f = "Syn5/xTrainSyn5"
+f = "Syn5/yTestSyn5"
 n = 10
 
 for j in range(n):
