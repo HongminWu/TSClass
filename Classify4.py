@@ -235,17 +235,17 @@ num=args.num
 
 ############################### USE THIS TO CALCULATE THE DISTANCES #####################
 
-#print getDistances("Syn5/xTestSyn5.npy", "Syn5/yTestSyn5.npy", "Syn5/xTrainSyn5.npy","Syn5/yTrainSyn5.npy",0)
-#print getDistances("Syn5/xTestSyn5_"+str(num)+".npy","Syn5/yTestSyn5_"+str(num)+".npy","Syn5/xTrainSyn5_"+str(num)+".npy", "Syn5/yTrainSyn5_"+str(num)+".npy",num)
+print getDistances("Syn5/xTestSyn5.npy", "Syn5/yTestSyn5.npy", "Syn5/xTrainSyn5.npy","Syn5/yTrainSyn5.npy",0)
+print getDistances("Syn5/xTestSyn5_"+str(num)+".npy","Syn5/yTestSyn5_"+str(num)+".npy","Syn5/xTrainSyn5_"+str(num)+".npy", "Syn5/yTrainSyn5_"+str(num)+".npy",num)
 
 ################################### USE THIS TO SPLIT DATA IF YOU NEED TO################
-
-f = "Syn5/xTrainSyn5"
+'''
+f = "Syn5/xTestSyn5"
 n = 10
 
 for j in range(n):
 	np.save(f+"_"+str(j)+".npy",np.load(f+".npy")[int(len(np.load(f+".npy"))*j/n):int(len(np.load(f+".npy"))*(j+1)/n)])
-
+'''
 
 #np.save(f+"_1.npy",np.load(f)[0:int(len(np.load(f))/5)])
 #np.save("xTrainSyn2_2.npy",np.load("xTrainSyn2.npy")[int(len(np.load("PUCK_xTrainC.npy"))/5):int(len(np.load("PUCK_xTrainC.npy"))*2/5)])
