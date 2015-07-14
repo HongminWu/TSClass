@@ -1,15 +1,20 @@
 import numpy as np
 import random 
 
-templates = np.load("synthetic/dba_templates.npy")
-templateLabels = np.load("synthetic/ycluster10.npy")
+templates = np.load("Synthetic2/xSyn2.npy")
+templateLabels = np.load("Synthetic2/ySyn2.npy")
+
+# templates = np.load("synthetic/dba_templates.npy")
+# templateLabels = np.load("synthetic/ycluster10.npy")
+
 nTemplate = len(templates)
+
 print nTemplate
 
 syn = []
 synLabel = []
 for ACT in range(6):
-	for TIME in range(200):
+	for TIME in range(500):
 		k = random.randint(0, nTemplate-1)
 		while templateLabels[k]!= ACT:
 			k = random.randint(0, nTemplate-1)
@@ -29,5 +34,11 @@ synLabel = np.array(synLabel)
 # np.save("synthetic/xTrainSyn.npy", syn)
 # np.save("synthetic/yTrainSyn.npy", synLabel)
 
-np.save("synthetic/xTestSyn.npy", syn)
-np.save("synthetic/yTestSyn.npy", synLabel)
+# np.save("synthetic/xTestSyn.npy", syn)
+# np.save("synthetic/yTestSyn.npy", synLabel)
+
+np.save("Synthetic2/xTrainSyn2.npy", syn)
+np.save("Synthetic2/yTrainSyn2.npy", synLabel)
+
+# np.save("Synthetic2/xTestSyn2.npy", syn)
+# np.save("Synthetic2/yTestSyn2.npy", synLabel)

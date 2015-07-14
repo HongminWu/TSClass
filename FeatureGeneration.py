@@ -2,6 +2,7 @@ import numpy as np
 from numpy import linalg as la
 import scipy as sp
 import Reader as r
+from sklearn import linear_model
 
 #6 features
 def getMean(x):
@@ -125,18 +126,26 @@ def rms(x):
 		rmss.append(np.sqrt(np.mean(k)))
 	return rmss
 
-def AR(index,file2):
-	ars =  []
-	arfeatures =  range(25,37)+range(65,77)+range(105,117)+range(145,157)+range(185,197)+range(209,213)+range(222,226)+range(235,239)+range(248,252)+range(261,265)
-	features = np.load(file2)
-	for k in range(len(features[index])):
-		if k in arfeatures:
-			ars.append(features[index][k])
-	return ars
+
+def ARCoef(x, bandwidth = 8):
+        for k in x:
+		autoReg = linear_model.LinearRegression()
+		X = []
+		Y = []
+		for i in range(bandwidth, len(k)):
+			Y.append(k[i])
+			temp = list([1])
+			for j in range(i-bandwidth, i):
+				temp.append(k[j])
+			X.append(temp)
+		autoReg.fit(X, Y)
+		return list(autoReg.coef_)
+
+
 
 def getFeatures(x):
 	featureVec = []
-	featureFunctions = [getMean, getSD, energy, correlation, autocorr, averageAbs, averageRes, numZeros, getKurtosis, getSkew, rms, largest5FFT]
+	featureFunctions = [getMean, getSD, energy, correlation, autocorr, averageAbs, averageRes, numZeros, getKurtosis, getSkew, rms, largest5FFT,ARCoef]
 	#featureFunctions = [averageRes]
 	for f in range(len(featureFunctions)):
 		w = featureFunctions[f](x)
@@ -170,7 +179,7 @@ def firstDiffTS(x):
 
 
 
-def featureExtraction(file1,file2):
+def featureExtraction(file1):
 	featuresTS = []
 	multTSAll= np.load(file1)
 	for TS in range(len(multTSAll)):
