@@ -7,8 +7,8 @@ Y = []
 
 for ts, pred, actl in data:
 	# print ts, pred, actl
-	print ts
-	print ts[0]
+	# print ts
+	# print ts[0]
 
 	X.append(ts)
 	Y.append(actl)
