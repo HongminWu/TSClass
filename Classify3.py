@@ -177,7 +177,7 @@ def getDistances(test,test_labels,train,train_labels,num):
 		dist = []
 		print "sample", i
 		for template in cluster_templates:
-			dist.append(ts.DTWDistance(sample,template)[0])
+			dist.append(ts.DTWsubseq(sample,template)[1])
 		distancefeatures.append(dist)
 		#predicted_labels.append(cluster_labels[np.argmin(dist)])
 		i+=1
@@ -194,7 +194,7 @@ def getDistances(test,test_labels,train,train_labels,num):
 	for k in xTrain:
 		dist = []
 		for temp in cluster_templates:
-			dist.append(ts.DTWDistance(k,temp)[0])
+			dist.append(ts.DTWsubseq(k,temp)[1])
 		dist_features_train.append(dist)
 
 ############################# CHANGE THESE###############################

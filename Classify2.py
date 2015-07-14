@@ -177,7 +177,7 @@ def getDistances(test,test_labels,train,train_labels,num):
 		dist = []
 		print "sample", i
 		for template in cluster_templates:
-			dist.append(ts.DTWDistance(sample,template)[0])
+			dist.append(ts.DTWsubseq(sample,template)[1])
 		distancefeatures.append(dist)
 		#predicted_labels.append(cluster_labels[np.argmin(dist)])
 		i+=1
@@ -194,7 +194,7 @@ def getDistances(test,test_labels,train,train_labels,num):
 	for k in xTrain:
 		dist = []
 		for temp in cluster_templates:
-			dist.append(ts.DTWDistance(k,temp)[0])
+			dist.append(ts.DTWsubseq(k,temp)[1])
 		dist_features_train.append(dist)
 
 ############################# CHANGE THESE###############################
@@ -243,13 +243,28 @@ print getDistances("Syn5/xTestSyn5_"+str(num)+".npy","Syn5/yTestSyn5_"+str(num)+
 
 ################################### USE THIS TO SPLIT DATA IF YOU NEED TO################
 '''
+n = 20
+
 f = "Syn5/xTestSyn5"
-n = 10
+
+for j in range(n):
+	np.save(f+"_"+str(j)+".npy",np.load(f+".npy")[int(len(np.load(f+".npy"))*j/n):int(len(np.load(f+".npy"))*(j+1)/n)])
+
+f = "Syn5/yTestSyn5"
+
+for j in range(n):
+	np.save(f+"_"+str(j)+".npy",np.load(f+".npy")[int(len(np.load(f+".npy"))*j/n):int(len(np.load(f+".npy"))*(j+1)/n)])
+
+f = "Syn5/xTrainSyn5"
+
+for j in range(n):
+	np.save(f+"_"+str(j)+".npy",np.load(f+".npy")[int(len(np.load(f+".npy"))*j/n):int(len(np.load(f+".npy"))*(j+1)/n)])
+
+f = "Syn5/yTrainSyn5"
 
 for j in range(n):
 	np.save(f+"_"+str(j)+".npy",np.load(f+".npy")[int(len(np.load(f+".npy"))*j/n):int(len(np.load(f+".npy"))*(j+1)/n)])
 '''
-
 #np.save(f+"_1.npy",np.load(f)[0:int(len(np.load(f))/5)])
 #np.save("xTrainSyn2_2.npy",np.load("xTrainSyn2.npy")[int(len(np.load("PUCK_xTrainC.npy"))/5):int(len(np.load("PUCK_xTrainC.npy"))*2/5)])
 #np.save("xTrainSyn2_3.npy",np.load("xTrainSyn2.npy")[int(len(np.load("PUCK_xTrainC.npy"))*2/5):int(len(np.load("PUCK_xTrainC.npy"))*3/5)])
