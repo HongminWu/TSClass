@@ -9,6 +9,8 @@ import argparse
 
 ############################# CHANGE THESE###############################
 
+### FILE 2: MNo modifier
+
 dist_clusts = np.load("Syn5/syn5_dist_cluster.npy")
 clusters = np.load("Syn5/syn5_cluster.npy")
 cluster_labels = np.load("Syn5/syn5_ycluster.npy")
@@ -38,8 +40,9 @@ def buildTemplates():
 		cluster_templates_aligned.append(ts.average(l))
 
 ############################# CHANGE THESE###############################
+### I guess this line is redundant
 
-	np.save("template/syn2_clusters_mindist_templates_hclust_average_newdist.npy",cluster_templates_aligned)
+	# np.save("template/syn5_template_original.npy",cluster_templates_aligned)
 #########################################################################
 
 	return cluster_templates_aligned
@@ -155,14 +158,14 @@ def getDistances(test,test_labels,train,train_labels,num):
 ############################# CHANGE THESE###############################
 
 	
-	#cluster_templates =  buildTemplates()
+	cluster_templates =  buildTemplates()
 	#cluster_templates = np.load("syn_cluster_templates_hclust_average_new_dist.npy",)
 	#cluster_templates = np.load("syn_cluster10_mindist_templates_hclust_average_new_dist.npy")
 	#build predited labels'
 	#cluster_templates = np.load("template/syn2_dba_templates_original0.25.npy")
 	#cluster_templates = np.load("template/cluster0.25_mindist_templates_hclust_average_subseq_newdist.npy")
 
-	cluster_templates = np.load("Syn5/syn5_dba_templates_original.npy")
+	# cluster_templates = np.load("Syn5/syn5_dba_templates_original.npy")
 #########################################################################
 
 	
@@ -181,7 +184,7 @@ def getDistances(test,test_labels,train,train_labels,num):
 
 ############################# CHANGE THESE###############################
 
-	np.save("dist/syn5_distance_hclust_dba_average_origdist_test"+str(num)+".npy",distancefeatures)
+	np.save("dist/syn5_distance_test"+str(num)+".npy",distancefeatures)
 
 #########################################################################
 		
@@ -196,7 +199,7 @@ def getDistances(test,test_labels,train,train_labels,num):
 
 ############################# CHANGE THESE###############################
 
-	np.save("dist/syn2_distance_hclust0.25_dba_average_origdist_train"+str(num)+".npy",dist_features_train)
+	np.save("dist/syn5_distance_train"+str(num)+".npy",dist_features_train)
 #########################################################################
 	'''
 	for k in range(len(test_labels)):
@@ -235,7 +238,7 @@ num=args.num
 
 ############################### USE THIS TO CALCULATE THE DISTANCES #####################
 
-print getDistances("Syn5/xTestSyn5.npy", "Syn5/yTestSyn5.npy", "Syn5/xTrainSyn5.npy","Syn5/yTrainSyn5.npy",0)
+# print getDistances("Syn5/xTestSyn5.npy", "Syn5/yTestSyn5.npy", "Syn5/xTrainSyn5.npy","Syn5/yTrainSyn5.npy",0)
 print getDistances("Syn5/xTestSyn5_"+str(num)+".npy","Syn5/yTestSyn5_"+str(num)+".npy","Syn5/xTrainSyn5_"+str(num)+".npy", "Syn5/yTrainSyn5_"+str(num)+".npy",num)
 
 ################################### USE THIS TO SPLIT DATA IF YOU NEED TO################
